@@ -1,0 +1,13 @@
+{
+  "appId": "com.aviculturapro.app",
+  "appName": "AviculturaPro",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#f8fafc"
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

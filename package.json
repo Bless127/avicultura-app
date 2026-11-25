@@ -1,0 +1,19 @@
+{
+  "name": "avicultura-pro-android",
+  "version": "1.0.0",
+  "description": "AviculturaPro - Gestión Integral de Pollos de Engorde para Android",
+  "main": "www/index.html",
+  "scripts": {
+    "sync": "npx cap sync android",
+    "android:init": "npx cap add android && npx cap sync android",
+    "apk:debug": "npx cap sync android && cd android && ./gradlew assembleDebug",
+    "apk:release": "npx cap sync android && cd android && ./gradlew assembleRelease"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.2"
+  }
+}

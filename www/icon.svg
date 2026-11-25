@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#166534"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="176" fill="#ffffff" fill-opacity="0.1"/>
+  <path d="M292 128c-22 0-40 16-43 37-30 10-53 38-53 72 0 42 34 76 76 76h48c35 0 64-29 64-64 0-27-17-50-41-59 4-8 6-17 6-26 0-20-16-36-36-36h-21z" fill="#ffffff"/>
+  <path d="M356 176l38 14-38 16z" fill="#f59e0b"/>
+  <circle cx="322" cy="174" r="7" fill="#14532d"/>
+  <path d="M276 128c0-16 12-28 26-28 8 0 14 5 16 12 4-4 10-6 16-6 11 0 20 9 20 20v6h-78v-4z" fill="#ef4444"/>
+  <path d="M236 313v52m-18 0h36m44-52v52m-18 0h36" stroke="#f59e0b" stroke-width="14" stroke-linecap="round"/>
+  <rect x="124" y="384" width="264" height="44" rx="22" fill="#f59e0b"/>
+  <text x="256" y="413" font-family="sans-serif" font-weight="800" font-size="24" fill="#14532d" text-anchor="middle">AVICULTURA PRO</text>
+</svg>

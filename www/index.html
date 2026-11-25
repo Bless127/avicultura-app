@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#166534" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <title>AviculturaPro</title>
+  <style>
+    :root {
+      --primary: #166534;
+      --primary-dark: #14532d;
+      --primary-light: #dcfce7;
+      --primary-mid: #15803d;
+      --amber: #d97706;
+      --amber-light: #fef3c7;
+      --blue: #1d4ed8;
+      --blue-light: #dbeafe;
+      --red: #dc2626;
+      --red-light: #fee2e2;
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 16px;
+      --shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      padding-top: calc(60px + env(safe-area-inset-top));
+      padding-bottom: calc(126px + env(safe-area-inset-bottom));
+      overscroll-behavior-y: none;
+    }
+
+    /* Top AppBar Material 3 */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: calc(60px + env(safe-area-inset-top));
+      padding-top: env(safe-area-inset-top);
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 14px;
+      padding-right: 14px;
+      z-index: 40;
+      box-shadow: 0 2px 12px rgba(20, 83, 45, 0.25);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kpi-pill {
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      color: #fff;
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 16px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 14px;
+    }
+
+    .tab-view {
+      display: none;
+      animation: fadeIn 0.18s ease-out;
+    }
+
+    .tab-view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards & Typography */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .badge-green { background: var(--primary-light); color: var(--primary-dark); }
+    .badge-amber { background: var(--amber-light); color: #92400e; }
+    .badge-blue { background: var(--blue-light); color: var(--blue); }
+    .badge-red { background: var(--red-light); color: var(--red); }
+
+    /* Form Controls */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .field {
+      margin-bottom: 10px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .input, select.input {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text);
+      background: #f8fafc;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    /* Feed Phase Blocks */
+    .phase-box {
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #fafaf9;
+    }
+
+    .phase-box.preinicio { border-left: 4px solid #f59e0b; }
+    .phase-box.inicio { border-left: 4px solid #2563eb; }
+    .phase-box.engorde { border-left: 4px solid #166534; }
+
+    .phase-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .phase-name {
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+
+    .phase-sub {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    /* Summary Strips */
+    .summary-bar {
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+      border: 1.5px solid #bbf7d0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .summary-bar.profit {
+      background: linear-gradient(135deg, #14532d, #166534);
+      color: #fff;
+      border: none;
+    }
+
+    .summary-bar.loss {
+      background: linear-gradient(135deg, #991b1b, #dc2626);
+      color: #fff;
+      border: none;
+    }
+
+    .big-num {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 42px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.15s;
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--primary); color: #fff; width: 100%; }
+    .btn-amber { background: var(--amber); color: #fff; }
+    .btn-outline { background: #fff; border: 1.5px solid var(--border); color: var(--text); }
+    .btn-sm { height: 34px; padding: 0 10px; font-size: 12px; border-radius: 10px; }
+
+    /* Progress Bar */
+    .progress-track {
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      display: flex;
+      margin: 8px 0;
+    }
+
+    .progress-fill-green { background: #16a34a; height: 100%; transition: width 0.3s; }
+    .progress-fill-amber { background: #f59e0b; height: 100%; transition: width 0.3s; }
+    .progress-fill-red { background: #ef4444; height: 100%; transition: width 0.3s; }
+
+    /* Weight Chips */
+    .chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+      max-height: 130px;
+      overflow-y: auto;
+    }
+
+    .chip {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chip button {
+      border: none;
+      background: none;
+      color: var(--red);
+      font-weight: 900;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      padding: 9px 10px;
+      font-weight: 800;
+      color: var(--muted);
+      border-bottom: 1.5px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+    }
+
+    tr.highlight-row {
+      background: #dcfce7;
+      font-weight: 800;
+    }
+
+    /* Floating KPI Mini-Bar & Bottom Nav */
+    .floating-kpi-bar {
+      position: fixed;
+      bottom: calc(64px + env(safe-area-inset-bottom));
+      left: 10px;
+      right: 10px;
+      max-width: 660px;
+      margin: 0 auto;
+      background: #0f172a;
+      color: #fff;
+      border-radius: 14px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.25);
+      z-index: 35;
+      cursor: pointer;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: calc(60px + env(safe-area-inset-bottom));
+      padding-bottom: env(safe-area-inset-bottom);
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      z-index: 40;
+    }
+
+    .nav-item {
+      border: none;
+      background: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item .nav-pill {
+      padding: 2px 14px;
+      border-radius: 999px;
+      font-size: 17px;
+      transition: background 0.15s;
+    }
+
+    .nav-item.active .nav-pill {
+      background: var(--primary-light);
+    }
+
+    /* Bottom Sheet (KPI Drawer) */
+    .sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.52);
+      backdrop-filter: blur(2px);
+      z-index: 50;
+      display: none;
+    }
+
+    .sheet-backdrop.open { display: block; }
+
+    .bottom-sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-width: 680px;
+      margin: 0 auto;
+      background: #fff;
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
+      padding: 12px 16px calc(24px + env(safe-area-inset-bottom));
+      z-index: 55;
+      transform: translateY(105%);
+      transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.18);
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .bottom-sheet.open {
+      transform: translateY(0);
+    }
+
+    .sheet-handle {
+      width: 42px;
+      height: 5px;
+      background: #cbd5e1;
+      border-radius: 999px;
+      margin: 0 auto 12px;
+    }
+
+    .kpi-card {
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .kpi-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .kpi-val {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    /* Filter Pills */
+    .filter-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+    }
+
+    .filter-chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .filter-chip.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .photo-preview {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-top: 8px;
+      background: #0f172a;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP APP BAR -->
+  <header class="top-bar">
+    <div class="brand">
+      <div class="brand-icon">🐓</div>
+      <div>
+        <div class="brand-title">AviculturaPro</div>
+        <div class="brand-sub" id="topSubTitle">Cobb 500 · Día 42 (Sem 6)</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="kpi-pill" onclick="toggleKpiSheet(true)">
+        <span>KPIs</span>
+        <span>▾</span>
+      </button>
+      <button class="icon-btn" onclick="openSettingsModal()" title="Ajustes y Respaldo">⚙️</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== TAB 1: GASTOS Y GANANCIAS EN CANAL ==================== -->
+    <section id="tab-gastos" class="tab-view active">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🐣 1. Inversión Inicial en Aves</div>
+          <span class="badge badge-green" id="badgeAvesVivas">20 aves vivas</span>
+        </div>
+        <div class="grid-3">
+          <div class="field">
+            <label>Cant. Pollitos</label>
+            <input type="number" id="cantPollitos" class="input" value="20" min="1" oninput="recalcAll()" />
+          </div>
+          <div class="field">
+            <label>Precio/Ave ($)</label>
+            <input type="number" id="precioPollito" class="input" value="0.85" step="0.01" min="0" oninput="recalcAll()" />
+          </div>
+          <div class="field">
+            <label>Mortalidad</label>
+            <input type="number" id="mortalidadAves" class="input" value="0" min="0" oninput="recalcAll()" />
+          </div>
+        </div>
+        <div class="summary-bar">
+          <span style="font-size:12.5px;font-weight:700;">Subtotal Pollitos BB:</span>
+          <strong style="font-size:16px;color:var(--primary-dark);" id="subPollitos">$17.00</strong>
+        </div>
+      </div>
+
+      <!-- ALIMENTO DIVIDIDO POR FASES -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🌾 2. Alimento por Fases Productivas</div>
+          <span class="badge badge-amber" id="totalKgAlimentoBadge">0 kg totales</span>
+        </div>
+
+        <!-- FASE PREINICIO -->
+        <div class="phase-box preinicio">
+          <div class="phase-top">
+            <span class="phase-name">🟡 Alimento Preinicio (Días 1–10)</span>
+            <span class="phase-sub" id="subPreinicio">$0.00 · 0 kg</span>
+          </div>
+          <div class="grid-3">
+            <div class="field" style="margin:0;">
+              <label>Sacos</label>
+              <input type="number" id="sacosPre" class="input" value="0.5" step="0.1" min="0" oninput="recalcAll()" />
+            </div>
+            <div class="field" style="margin:0;">
+              <label>Precio/Saco ($)</label>
+              <input type="number" id="precioPre" class="input" value="28.00" step="0.1" min="0" oninput="recalcAll()" />
+            </div>
+            <div class="field" style="margin:0;">
+              <label>Kg/Saco</label>
+              <select id="kgSacoPre" class="input" onchange="recalcAll()">
+                <option value="40" selected>40 kg</option>
+                <option value="45">45 kg</option>
+                <option value="50">50 kg</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- FASE INICIO -->
+        <div class="phase-box inicio">
+          <div class="phase-top">
+            <span class="phase-name">🔵 Alimento Inicio (Días 11–21)</span>
+            <span class="phase-sub" id="subInicio">$0.00 · 0 kg</span>
+          </div>
+          <div class="grid-3">
+            <div class="field" style="margin:0;">
+              <label>Sacos</label>
+              <input type="number" id="sacosIni" class="input" value="1" step="0.1" min="0" oninput="recalcAll()" />
+            </div>
+            <div class="field" style="margin:0;">
+              <label>Precio/Saco ($)</label>
+              <input type="number" id="precioIni" class="input" value="26.50" step="0.1" min="0" oninput="recalcAll()" />
+            </div>
+            <div class="field" style="margin:0;">
+              <label>Kg/Saco</label>
+              <select id="kgSacoIni" class="input" onchange="recalcAll()">
+                <option value="40" selected>40 kg</option>
+                <option value="45">45 kg</option>
+                <option value="50">50 kg</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- FASE ENGORDE -->
+        <div class="phase-box engorde">
+          <div class="phase-top">
+            <span class="phase-name">🟢 Alimento Engorde (Día 22+)</span>
+            <span class="phase-sub" id="subEngorde">$0.00 · 0 kg</span>
+          </div>
+          <div class="grid-3">
+            <div class="field" style="margin:0;">
+              <label>Sacos</label>
+              <input type="number" id="sacosEng" class="input" value="1.5" step="0.1" min="0" oninput="recalcAll()" />
+            </div>
+            <div class="field" style="margin:0;">
+              <label>Precio/Saco ($)</label>
+              <input type="number" id="precioEng" class="input" value="25.00" step="0.1" min="0" oninput="recalcAll()" />
+            </div>
+            <div class="field" style="margin:0;">
+              <label>Kg/Saco</label>
+              <select id="kgSacoEng" class="input" onchange="recalcAll()">
+                <option value="40" selected>40 kg</option>
+                <option value="45">45 kg</option>
+                <option value="50">50 kg</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-bar">
+          <span style="font-size:12.5px;font-weight:700;">Total Alimento (3 Fases):</span>
+          <strong style="font-size:16px;color:var(--primary-dark);" id="totalAlimentoCosto">$78.00</strong>
+        </div>
+      </div>
+
+      <!-- SANIDAD Y OTROS GASTOS -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">💊 3. Sanidad y Gastos Operativos</div>
+          <button class="btn btn-outline btn-sm" onclick="addExtraExpense()">+ Extra</button>
+        </div>
+        <div class="grid-3">
+          <div class="field">
+            <label>Vitaminas ($)</label>
+            <input type="number" id="gastoVitaminas" class="input" value="4.50" step="0.1" min="0" oninput="recalcAll()" />
+          </div>
+          <div class="field">
+            <label>Medicinas ($)</label>
+            <input type="number" id="gastoMedicinas" class="input" value="5.50" step="0.1" min="0" oninput="recalcAll()" />
+          </div>
+          <div class="field">
+            <label>Cama/Otros ($)</label>
+            <input type="number" id="gastoOtros" class="input" value="5.00" step="0.1" min="0" oninput="recalcAll()" />
+          </div>
+        </div>
+        <div id="extraExpensesContainer"></div>
+
+        <div class="summary-bar" style="background:#fef3c7;border-color:#fde68a;">
+          <div>
+            <div style="font-size:11.5px;font-weight:800;color:#92400e;">TOTAL INVERSIÓN DEL LOTE</div>
+            <div style="font-size:11px;color:#b45309;" id="costoPorAveLabel">$5.50 / ave viva</div>
+          </div>
+          <div class="big-num" style="color:#92400e;" id="totalGastosGeneral">$110.00</div>
+        </div>
+      </div>
+
+      <!-- GANANCIAS POR PESO TOTAL BENEFICIADO -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🥩 4. Liquidación y Ganancias (Beneficiado)</div>
+          <span class="badge badge-blue" id="mermaAplicadaBadge">Merma 26%</span>
+        </div>
+
+        <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">
+          Calcula tus ganancias reales usando el <strong>peso total en canal (pollos ya beneficiados)</strong>, descontando la pérdida por sacrificio.
+        </p>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Peso Total Beneficiado (kg)</label>
+            <input type="number" id="pesoTotalBeneficiado" class="input" value="40.00" step="0.1" min="0" oninput="recalcAll()" />
+          </div>
+          <div class="field">
+            <label>Precio Venta Canal ($/kg)</label>
+            <input type="number" id="precioVentaKg" class="input" value="3.80" step="0.05" min="0" oninput="recalcAll()" />
+          </div>
+        </div>
+
+        <button class="btn btn-outline btn-sm" style="width:100%;margin-bottom:10px;" onclick="syncBeneficiadoFromLive()">
+          ⚡ Estimar automáticamente desde peso vivo promedio y merma
+        </button>
+
+        <div style="font-size:11.5px;display:flex;justify-content:space-between;font-weight:700;color:var(--muted);">
+          <span id="lblVivoTotal">Vivo lote: 54.05 kg</span>
+          <span id="lblMermaTotal">Merma: -14.05 kg (26%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill-green" id="barRendimiento" style="width:74%;"></div>
+          <div class="progress-fill-red" id="barMerma" style="width:26%;"></div>
+        </div>
+
+        <div class="grid-2" style="margin-top:8px;">
+          <div class="kpi-card">
+            <span class="kpi-label">Ingreso Bruto Venta</span>
+            <span class="kpi-val" style="font-size:17px;" id="ingresoBrutoVal">$152.00</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Punto Equilibrio</span>
+            <span class="kpi-val" style="font-size:17px;" id="puntoEquilibrioVal">$2.75 / kg</span>
+          </div>
+        </div>
+
+        <div class="summary-bar profit" id="profitBanner" style="margin-top:10px;">
+          <div>
+            <div style="font-size:11px;font-weight:800;opacity:0.9;">GANANCIA NETA REAL (BENEFICIADO)</div>
+            <div style="font-size:12px;opacity:0.85;" id="roiSubLabel">ROI: +38.2% · $2.10 / ave</div>
+          </div>
+          <div class="big-num" id="gananciaNetaVal">+$42.00</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: PESAJE POR FOTO O MANUAL VS TABLAS ==================== -->
+    <section id="tab-pesaje" class="tab-view">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📸 1. Cargar Tabla de Pesos (Foto o Manual)</div>
+          <span class="badge badge-green" id="sampleCountBadge">5 aves muestreadas</span>
+        </div>
+
+        <!-- SUBIR FOTO / CÁMARA ANDROID -->
+        <div style="background:#f8fafc;border:1.5px dashed #94a3b8;border-radius:14px;padding:12px;margin-bottom:12px;text-align:center;">
+          <div style="font-size:13px;font-weight:800;margin-bottom:4px;">📷 Sube o toma foto de tu libreta de pesaje</div>
+          <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">Abre la cámara de tu Android o selecciona una captura de tu tabla</div>
+          <div class="grid-2">
+            <label class="btn btn-primary btn-sm" style="cursor:pointer;">
+              📸 Cámara / Galería
+              <input type="file" id="weightPhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoUpload(event)" />
+            </label>
+            <button class="btn btn-amber btn-sm" id="btnOcrAnalyze" onclick="analyzePhotoWithAI()" disabled>
+              ✨ Extraer Pesos (IA)
+            </button>
+          </div>
+          <img id="weightPhotoPreview" class="photo-preview" alt="Vista previa tabla de pesos" />
+          <div id="ocrStatusMsg" style="font-size:11.5px;color:var(--primary-dark);font-weight:700;margin-top:6px;"></div>
+        </div>
+
+        <!-- INGRESO MANUAL INDIVIDUAL O POR CESTA -->
+        <div class="grid-2">
+          <div class="field">
+            <label>Peso individual / cesta</label>
+            <input type="number" id="manualWeightInput" class="input" placeholder="Ej: 2.65 o 2650" step="0.01" />
+          </div>
+          <div class="field">
+            <label>Aves en ese pesaje</label>
+            <input type="number" id="manualBirdCount" class="input" value="1" min="1" />
+          </div>
+        </div>
+        <div class="grid-2">
+          <button class="btn btn-primary btn-sm" onclick="addWeightSample()">+ Agregar Pesaje</button>
+          <button class="btn btn-outline btn-sm" onclick="clearWeightSamples()">Limpiar Lista</button>
+        </div>
+
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;">
+          * Detecta automático: si ingresas &gt; 20 lo toma en <strong>gramos (g)</strong>; si es &le; 20 lo toma en <strong>kilogramos (kg)</strong>. Si pesas 5 pollos juntos en una cesta, pon 5 en "Aves en ese pesaje".
+        </div>
+
+        <div class="chips-wrap" id="weightChipsContainer"></div>
+
+        <div class="summary-bar" style="margin-top:12px;">
+          <div>
+            <div style="font-size:11px;font-weight:800;color:var(--primary-dark);">PROMEDIO REAL CALCULADO</div>
+            <div style="font-size:11.5px;color:var(--muted);" id="uniformityLabel">Uniformidad: 100% (±10%)</div>
+          </div>
+          <div class="big-num" style="color:var(--primary-dark);" id="avgLiveWeightDisplay">2.70 kg</div>
+        </div>
+      </div>
+
+      <!-- COMPARATIVA CON TABLAS ESTÁNDAR -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📊 2. Comparativa vs Tabla Estándar</div>
+          <span class="badge badge-green" id="vsTableDiffBadge">+0.0% vs tabla</span>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Línea Genética</label>
+            <select id="geneticLine" class="input" onchange="recalcAll()">
+              <option value="cobb500" selected>Cobb 500</option>
+              <option value="ross308">Ross 308</option>
+              <option value="mixto">Promedio Mixto</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Edad del Lote (Días)</label>
+            <input type="number" id="loteAgeDays" class="input" value="42" min="1" max="56" oninput="recalcAll()" />
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:12px;">
+          <div class="kpi-card">
+            <span class="kpi-label">Estándar Tabla (Día <span id="lblTargetDay">42</span>)</span>
+            <span class="kpi-val" style="font-size:17px;" id="stdWeightDayVal">2.85 kg</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Diferencia Real</span>
+            <span class="kpi-val" style="font-size:17px;" id="diffGramsVal">-150 g</span>
+          </div>
+        </div>
+
+        <!-- CURVA SVG OFFLINE -->
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11.5px;font-weight:800;color:var(--muted);margin-bottom:4px;">CURVA DE CRECIMIENTO (ESTÁNDAR VS TU LOTE)</div>
+          <svg id="growthChartSvg" viewBox="0 0 360 165" style="width:100%;height:auto;background:#f8fafc;border-radius:12px;border:1px solid var(--border);"></svg>
+        </div>
+
+        <!-- TABLA SEMANAL COMPLETA -->
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Sem</th>
+                <th>Días</th>
+                <th>Peso Est.</th>
+                <th>Gan/Día</th>
+                <th>ICA Est.</th>
+              </tr>
+            </thead>
+            <tbody id="standardTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: MERMA Y RENDIMIENTO EN CANAL ==================== -->
+    <section id="tab-merma" class="tab-view">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🔪 Calculadora de Merma al Beneficiar</div>
+          <span class="badge badge-amber" id="mermaYieldBadge">Rendimiento 74%</span>
+        </div>
+
+        <div class="field">
+          <label>Tipo de Beneficio / Presentación</label>
+          <select id="dressType" class="input" onchange="onDressTypeChange()">
+            <option value="26" selected>Canal limpia sin menudencias (26% merma)</option>
+            <option value="20">Canal con menudencias / vísceras + patas (20% merma)</option>
+            <option value="custom">Personalizado (% merma manual)</option>
+          </select>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Porcentaje de Merma (%)</label>
+            <input type="number" id="mermaPercentInput" class="input" value="26" step="0.5" min="5" max="50" oninput="recalcAll()" />
+          </div>
+          <div class="field">
+            <label>Aves a Beneficiar</label>
+            <input type="number" id="birdsToDress" class="input" value="20" min="1" oninput="recalcAll()" />
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:6px;">
+          <div class="kpi-card">
+            <span class="kpi-label">Peso Vivo Total</span>
+            <span class="kpi-val" style="font-size:17px;" id="mermaLiveTotal">54.00 kg</span>
+            <span style="font-size:11px;color:var(--muted);" id="mermaLivePerBird">2.70 kg / ave</span>
+          </div>
+          <div class="kpi-card" style="background:#f0fdf4;border-color:#bbf7d0;">
+            <span class="kpi-label" style="color:var(--primary-dark);">Peso Beneficiado Total</span>
+            <span class="kpi-val" style="font-size:17px;color:var(--primary-dark);" id="mermaDressedTotal">39.96 kg</span>
+            <span style="font-size:11px;color:var(--primary);" id="mermaDressedPerBird">2.00 kg / ave</span>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <div style="font-size:11.5px;font-weight:800;color:var(--muted);margin-bottom:4px;">DESGLOSE ANATÓMICO ESTIMADO DEL LOTE</div>
+          <div class="progress-track" style="height:16px;">
+            <div class="progress-fill-green" id="anatCarcass" style="width:74%;" title="Canal aprovechable"></div>
+            <div class="progress-fill-amber" id="anatGiblets" style="width:8%;" title="Menudencias"></div>
+            <div class="progress-fill-red" id="anatLoss" style="width:18%;" title="Plumas, sangre y vísceras no comestibles"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-top:4px;">
+            <span style="color:#15803d;" id="lblAnatCarcass">● Canal: 39.96 kg</span>
+            <span style="color:#b45309;" id="lblAnatGiblets">● Menudencias: 4.32 kg</span>
+            <span style="color:#dc2626;" id="lblAnatLoss">● Descarte: 9.72 kg</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="margin-top:14px;" onclick="applyDressedToProfit()">
+          ✅ Usar este peso beneficiado en Ganancias
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: GUÍA TÉCNICA DE MANEJO ==================== -->
+    <section id="tab-guia" class="tab-view">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📋 Guía Técnica de Engorde</div>
+          <span class="badge badge-green">Clima Tropical</span>
+        </div>
+
+        <div class="filter-row" id="guideFilters">
+          <button class="filter-chip active" onclick="filterGuide('all', this)">Todas</button>
+          <button class="filter-chip" onclick="filterGuide('recepcion', this)">1. Cría (1–7d)</button>
+          <button class="filter-chip" onclick="filterGuide('crecimiento', this)">2. Crecimiento (8–21d)</button>
+          <button class="filter-chip" onclick="filterGuide('engorde', this)">3. Engorde (22d+)</button>
+          <button class="filter-chip" onclick="filterGuide('bioseguridad', this)">4. Bioseguridad</button>
+        </div>
+
+        <div id="guideCardsContainer">
+          <div class="phase-box preinicio guide-item" data-cat="recepcion">
+            <div class="phase-name">🌡️ Etapa 1: Recepción y Cría (Días 1–7)</div>
+            <ul style="padding-left:18px;font-size:12.5px;margin-top:6px;color:#334155;">
+              <li><strong>Temperatura:</strong> 32°C – 33°C los primeros 3 días; bajar 2–3°C por semana. Evitar corrientes de aire directas.</li>
+              <li><strong>Hidratación:</strong> Agua limpia con electrolitos y vitaminas las primeras 4 horas antes de servir Preinicio.</li>
+              <li><strong>Cama:</strong> Concha de arroz o viruta seca de 5–8 cm de espesor para aislar humedad del piso.</li>
+            </ul>
+          </div>
+
+          <div class="phase-box inicio guide-item" data-cat="crecimiento">
+            <div class="phase-name">📈 Etapa 2: Desarrollo y Crecimiento (Días 8–21)</div>
+            <ul style="padding-left:18px;font-size:12.5px;margin-top:6px;color:#334155;">
+              <li><strong>Transición de alimento:</strong> Cambiar gradualmente de Preinicio a Inicio (día 10–12) mezclando 50/50 por 2 días.</li>
+              <li><strong>Altura de equipos:</strong> Ajustar comederos y bebederos a la altura del dorso del ave para evitar desperdicio.</li>
+              <li><strong>Ventilación:</strong> En clima cálido, manejar cortinas laterales progresivamente para disipar amoníaco.</li>
+            </ul>
+          </div>
+
+          <div class="phase-box engorde guide-item" data-cat="engorde">
+            <div class="phase-name">🍗 Etapa 3: Engorde y Ayuno Pre-Sacrificio (Día 22+)</div>
+            <ul style="padding-left:18px;font-size:12.5px;margin-top:6px;color:#334155;">
+              <li><strong>Densidad máxima en trópico:</strong> 8 a 10 aves/m² para evitar estrés calórico en la recta final.</li>
+              <li><strong>Estrés por calor:</strong> En horas pico (11 AM – 4 PM), asegurar agua fresca y ventilación cruzada.</li>
+              <li><strong>Ayuno pre-beneficio:</strong> Retirar alimento 8 a 10 horas antes del sacrificio (mantener agua hasta 2 horas antes) para evitar contaminación fecal de la canal y mejorar el rendimiento.</li>
+            </ul>
+          </div>
+
+          <div class="phase-box guide-item" data-cat="bioseguridad" style="border-left:4px solid #7c3aed;">
+            <div class="phase-name">🛡️ Bioseguridad y Vacunación Base</div>
+            <ul style="padding-left:18px;font-size:12.5px;margin-top:6px;color:#334155;">
+              <li><strong>Pediluvio obligatorio:</strong> Desinfección de calzado con amonio cuaternario o yodo antes de entrar al galpón.</li>
+              <li><strong>Esquema base:</strong> Día 7 Newcastle + Bronquitis (ocular/agua); Día 14 Gumboro; Día 21 Refuerzo Newcastle.</li>
+              <li><strong>Vacío sanitario:</strong> Mínimo 12–15 días de descanso, limpieza y desinfección entre lotes.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FLOATING KPI MINI-BAR -->
+  <div class="floating-kpi-bar" onclick="toggleKpiSheet(true)">
+    <div>
+      <span style="opacity:0.75;">Gastos:</span> <strong id="miniBarCost">$110.00</strong>
+      <span style="margin:0 6px;opacity:0.4;">|</span>
+      <span style="opacity:0.75;">Neto:</span> <strong id="miniBarProfit" style="color:#4ade80;">+$42.00</strong>
+    </div>
+    <span style="font-weight:800;color:#fde047;">Ver KPIs ▲</span>
+  </div>
+
+  <!-- ANDROID BOTTOM NAVIGATION -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('gastos', this)">
+      <span class="nav-pill">💰</span>
+      <span>Gastos</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('pesaje', this)">
+      <span class="nav-pill">⚖️</span>
+      <span>Pesaje</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('merma', this)">
+      <span class="nav-pill">🔪</span>
+      <span>Merma</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('guia', this)">
+      <span class="nav-pill">📘</span>
+      <span>Guía</span>
+    </button>
+  </nav>
+
+  <!-- ANDROID BOTTOM SHEET (DYNAMIC KPI DRAWER) -->
+  <div class="sheet-backdrop" id="kpiBackdrop" onclick="toggleKpiSheet(false)"></div>
+  <aside class="bottom-sheet" id="kpiSheet">
+    <div class="sheet-handle" onclick="toggleKpiSheet(false)"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <strong style="font-size:16px;">📊 Indicadores Clave del Lote (KPIs)</strong>
+      <button class="btn btn-outline btn-sm" onclick="toggleKpiSheet(false)">Cerrar ✕</button>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:10px;">
+      <div class="kpi-card">
+        <span class="kpi-label">Edad / Línea</span>
+        <span class="kpi-val" id="kpiAgeLine">Día 42 (Sem 6)</span>
+        <span class="badge badge-green" style="align-self:flex-start;" id="kpiGeneticBadge">Cobb 500</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Promedio Vivo</span>
+        <span class="kpi-val" id="kpiAvgWeight">2.70 kg</span>
+        <span class="badge badge-blue" style="align-self:flex-start;" id="kpiVsStdBadge">-5.3% vs tabla</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Total Gastos Lote</span>
+        <span class="kpi-val" id="kpiTotalCost">$110.00</span>
+        <span class="badge badge-amber" style="align-self:flex-start;" id="kpiCostPerBird">$5.50 / ave</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Ganancia Neta (Canal)</span>
+        <span class="kpi-val" style="color:var(--primary);" id="kpiNetProfit">+$42.00</span>
+        <span class="badge badge-green" style="align-self:flex-start;" id="kpiRoiBadge">+38.2% ROI</span>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="kpi-card">
+        <span class="kpi-label">ICA Proyectado (Conversión)</span>
+        <span class="kpi-val" style="font-size:17px;" id="kpiIcaVal">2.22</span>
+        <span style="font-size:11px;color:var(--muted);">kg alimento / kg vivo</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Incidencia Alimento</span>
+        <span class="kpi-val" style="font-size:17px;" id="kpiFeedShare">70.9%</span>
+        <span style="font-size:11px;color:var(--muted);">del costo total del lote</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- SETTINGS & BACKUP MODAL -->
+  <div class="sheet-backdrop" id="settingsBackdrop" onclick="closeSettingsModal()"></div>
+  <div class="bottom-sheet" id="settingsModal">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <strong style="font-size:16px;">⚙️ Ajustes y Respaldo de Datos</strong>
+      <button class="btn btn-outline btn-sm" onclick="closeSettingsModal()">Cerrar ✕</button>
+    </div>
+    <div class="field">
+      <label>API Key de Gemini (Opcional - para lectura OCR de fotos)</label>
+      <input type="password" id="geminiApiKeyInput" class="input" placeholder="AIzaSy..." onchange="saveApiKey()" />
+    </div>
+    <div class="grid-2" style="margin-top:10px;">
+      <button class="btn btn-outline btn-sm" onclick="exportBackup()">📤 Exportar Respaldo JSON</button>
+      <button class="btn btn-outline btn-sm" onclick="resetDefaults()">🔄 Restablecer Valores</button>
+    </div>
+  </div>
+
+  <script>
+    // Standard Weekly Broiler Tables (grams)
+    const BREED_TABLES = {
+      cobb500: [
+        { week: 1, day: 7,  weight: 185,  gain: 21, ica: 0.88 },
+        { week: 2, day: 14, weight: 465,  gain: 40, ica: 1.12 },
+        { week: 3, day: 21, weight: 943,  gain: 68, ica: 1.28 },
+        { week: 4, day: 28, weight: 1567, gain: 89, ica: 1.42 },
+        { week: 5, day: 35, weight: 2250, gain: 98, ica: 1.56 },
+        { week: 6, day: 42, weight: 2850, gain: 86, ica: 1.71 },
+        { week: 7, day: 49, weight: 3420, gain: 81, ica: 1.88 },
+        { week: 8, day: 56, weight: 3910, gain: 70, ica: 2.05 }
+      ],
+      ross308: [
+        { week: 1, day: 7,  weight: 189,  gain: 21, ica: 0.86 },
+        { week: 2, day: 14, weight: 480,  gain: 42, ica: 1.10 },
+        { week: 3, day: 21, weight: 960,  gain: 69, ica: 1.26 },
+        { week: 4, day: 28, weight: 1580, gain: 89, ica: 1.40 },
+        { week: 5, day: 35, weight: 2235, gain: 94, ica: 1.55 },
+        { week: 6, day: 42, weight: 2857, gain: 89, ica: 1.69 },
+        { week: 7, day: 49, weight: 3440, gain: 83, ica: 1.86 },
+        { week: 8, day: 56, weight: 3950, gain: 73, ica: 2.02 }
+      ]
+    };
+
+    let weightSamples = [2.68, 2.74, 2.65, 2.71, 2.72]; // kg per bird
+    let extraExpenses = [];
+    let currentPhotoBase64 = null;
+
+    function getStandardWeightForDay(breed, day) {
+      const table = breed === 'mixto'
+        ? BREED_TABLES.cobb500.map((r, i) => ({
+            day: r.day,
+            weight: Math.round((r.weight + BREED_TABLES.ross308[i].weight) / 2)
+          }))
+        : BREED_TABLES[breed];
+
+      if (day <= 1) return 42;
+      if (day <= 7) return 42 + ((table[0].weight - 42) / 6) * (day - 1);
+      for (let i = 1; i < table.length; i++) {
+        if (day <= table[i].day) {
+          const prev = table[i - 1];
+          const curr = table[i];
+          return prev.weight + ((curr.weight - prev.weight) / (curr.day - prev.day)) * (day - prev.day);
+        }
+      }
+      return table[table.length - 1].weight;
+    }
+
+    function switchTab(tabName, btnEl) {
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      btnEl.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleKpiSheet(open) {
+      document.getElementById('kpiBackdrop').classList.toggle('open', open);
+      document.getElementById('kpiSheet').classList.toggle('open', open);
+    }
+
+    function openSettingsModal() {
+      document.getElementById('geminiApiKeyInput').value = localStorage.getItem('avipro_gemini_key') || '';
+      document.getElementById('settingsBackdrop').classList.add('open');
+      document.getElementById('settingsModal').classList.add('open');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsBackdrop').classList.remove('open');
+      document.getElementById('settingsModal').classList.remove('open');
+    }
+
+    function saveApiKey() {
+      const key = document.getElementById('geminiApiKeyInput').value.trim();
+      localStorage.setItem('avipro_gemini_key', key);
+    }
+
+    function addExtraExpense(name = '', amount = 0) {
+      extraExpenses.push({ id: Date.now() + Math.random(), name, amount });
+      renderExtraExpenses();
+      recalcAll();
+    }
+
+    function removeExtraExpense(id) {
+      extraExpenses = extraExpenses.filter(e => e.id !== id);
+      renderExtraExpenses();
+      recalcAll();
+    }
+
+    function renderExtraExpenses() {
+      const container = document.getElementById('extraExpensesContainer');
+      container.innerHTML = extraExpenses.map((item, idx) => `
+        <div style="display:grid;grid-template-columns:1.5fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center;">
+          <input type="text" class="input" placeholder="Concepto (ej: Gas)" value="${item.name}"
+            oninput="extraExpenses[${idx}].name=this.value;saveState();" />
+          <input type="number" class="input" placeholder="$" value="${item.amount}" step="0.1"
+            oninput="extraExpenses[${idx}].amount=parseFloat(this.value)||0;recalcAll();" />
+          <button class="btn btn-outline btn-sm" style="color:var(--red);" onclick="removeExtraExpense(${item.id})">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function addWeightSample() {
+      const rawVal = parseFloat(document.getElementById('manualWeightInput').value);
+      const count = Math.max(1, parseInt(document.getElementById('manualBirdCount').value) || 1);
+      if (!rawVal || rawVal <= 0) return;
+
+      // Normalize to kg per bird
+      const totalKg = rawVal > 20 ? rawVal / 1000 : rawVal;
+      const perBirdKg = +(totalKg / count).toFixed(3);
+
+      for (let i = 0; i < count; i++) {
+        weightSamples.push(perBirdKg);
+      }
+
+      document.getElementById('manualWeightInput').value = '';
+      document.getElementById('manualBirdCount').value = '1';
+      renderWeightChips();
+      recalcAll();
+    }
+
+    function removeWeightSample(index) {
+      weightSamples.splice(index, 1);
+      renderWeightChips();
+      recalcAll();
+    }
+
+    function clearWeightSamples() {
+      weightSamples = [];
+      renderWeightChips();
+      recalcAll();
+    }
+
+    function renderWeightChips() {
+      const container = document.getElementById('weightChipsContainer');
+      document.getElementById('sampleCountBadge').textContent = `${weightSamples.length} aves muestreadas`;
+      if (weightSamples.length === 0) {
+        container.innerHTML = '<span style="font-size:12px;color:var(--muted);">Sin pesajes registrados. Agrega pesos arriba.</span>';
+        return;
+      }
+      container.innerHTML = weightSamples.map((w, i) => `
+        <span class="chip">
+          #${i + 1}: ${w.toFixed(2)} kg
+          <button onclick="removeWeightSample(${i})">×</button>
+        </span>
+      `).join('');
+    }
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentPhotoBase64 = e.target.result;
+        const img = document.getElementById('weightPhotoPreview');
+        img.src = currentPhotoBase64;
+        img.style.display = 'block';
+        document.getElementById('btnOcrAnalyze').disabled = false;
+        document.getElementById('ocrStatusMsg').textContent = 'Foto cargada. Pulsa "Extraer Pesos (IA)" o transcríbelos abajo.';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function analyzePhotoWithAI() {
+      const apiKey = localStorage.getItem('avipro_gemini_key');
+      const statusEl = document.getElementById('ocrStatusMsg');
+      if (!apiKey) {
+        statusEl.textContent = 'Configura tu API Key de Gemini en ⚙️ Ajustes para lectura automática, o ingresa los pesos manualmente abajo.';
+        return;
+      }
+      if (!currentPhotoBase64) return;
+
+      statusEl.textContent = 'Analizando tabla de pesos con Gemini...';
+      try {
+        const base64Data = currentPhotoBase64.split(',')[1];
+        const mimeType = currentPhotoBase64.split(';')[0].split(':')[1];
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [
+                { text: 'Extrae todos los pesos de pollos de esta tabla/imagen y devuélvelos ÚNICAMENTE como un arreglo JSON de números en kilogramos por ave (ejemplo: [2.45, 2.50, 2.38]). Si están en gramos, divídelos entre 1000.' },
+                { inline_data: { mime_type: mimeType, data: base64Data } }
+              ]
+            }]
+          })
+        });
+        const data = await res.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        const match = text.match(/\[[\d.,\s]+\]/);
+        if (match) {
+          const parsed = JSON.parse(match[0]).map(n => +parseFloat(n).toFixed(3)).filter(n => n > 0 && n < 10);
+          if (parsed.length > 0) {
+            weightSamples = parsed;
+            renderWeightChips();
+            recalcAll();
+            statusEl.textContent = `✅ Se extrajeron ${parsed.length} pesos correctamente.`;
+            return;
+          }
+        }
+        statusEl.textContent = 'No se detectaron números claros en la imagen. Ingrésalos manualmente.';
+      } catch (err) {
+        statusEl.textContent = 'Sin conexión o error de red. Usa el ingreso manual offline.';
+      }
+    }
+
+    function onDressTypeChange() {
+      const val = document.getElementById('dressType').value;
+      if (val !== 'custom') {
+        document.getElementById('mermaPercentInput').value = val;
+      }
+      recalcAll();
+    }
+
+    function syncBeneficiadoFromLive() {
+      const liveBirds = Math.max(0, (parseFloat(document.getElementById('cantPollitos').value) || 0) - (parseFloat(document.getElementById('mortalidadAves').value) || 0));
+      const avgKg = getAverageWeightKg();
+      const mermaPct = parseFloat(document.getElementById('mermaPercentInput').value) || 26;
+      const dressedTotal = liveBirds * avgKg * (1 - mermaPct / 100);
+      document.getElementById('pesoTotalBeneficiado').value = dressedTotal.toFixed(2);
+      recalcAll();
+    }
+
+    function applyDressedToProfit() {
+      syncBeneficiadoFromLive();
+      const gastosNav = document.querySelectorAll('.nav-item')[0];
+      switchTab('gastos', gastosNav);
+    }
+
+    function getAverageWeightKg() {
+      if (weightSamples.length === 0) return 0;
+      const sum = weightSamples.reduce((a, b) => a + b, 0);
+      return sum / weightSamples.length;
+    }
+
+    function renderGrowthChart(breed, currentDay, avgKg) {
+      const svg = document.getElementById('growthChartSvg');
+      const weeks = [1, 2, 3, 4, 5, 6, 7, 8];
+      const maxW = 4.2;
+      const padL = 32, padR = 14, padT = 14, padB = 24;
+      const w = 360 - padL - padR;
+      const h = 165 - padT - padB;
+
+      let gridLines = '';
+      for (let kg = 0; kg <= 4; kg++) {
+        const y = padT + h - (kg / maxW) * h;
+        gridLines += `<line x1="${padL}" y1="${y}" x2="${360 - padR}" y2="${y}" stroke="#e2e8f0" stroke-width="1"/>`;
+        gridLines += `<text x="${padL - 5}" y="${y + 4}" font-size="9" fill="#64748b" text-anchor="end">${kg}kg</text>`;
+      }
+
+      const pts = weeks.map((wk, idx) => {
+        const x = padL + (idx / 7) * w;
+        const stdKg = getStandardWeightForDay(breed, wk * 7) / 1000;
+        const y = padT + h - (stdKg / maxW) * h;
+        return `${x},${y}`;
+      }).join(' ');
+
+      const xLabels = weeks.map((wk, idx) => {
+        const x = padL + (idx / 7) * w;
+        return `<text x="${x}" y="${165 - 6}" font-size="9" fill="#64748b" text-anchor="middle">S${wk}</text>`;
+      }).join('');
+
+      const clampedDay = Math.min(56, Math.max(1, currentDay));
+      const userX = padL + ((clampedDay - 7) / 49) * w;
+      const userY = padT + h - (Math.min(maxW, avgKg) / maxW) * h;
+
+      svg.innerHTML = `
+        ${gridLines}
+        ${xLabels}
+        <polyline fill="none" stroke="#16a34a" stroke-width="2.5" points="${pts}" />
+        ${avgKg > 0 ? `<circle cx="${Math.max(padL, userX)}" cy="${userY}" r="5.5" fill="#d97706" stroke="#fff" stroke-width="2"/>` : ''}
+      `;
+    }
+
+    function renderStandardTable(breed, currentWeek) {
+      const tbody = document.getElementById('standardTableBody');
+      const base = breed === 'ross308' ? BREED_TABLES.ross308 : BREED_TABLES.cobb500;
+      tbody.innerHTML = base.map((row, i) => {
+        const wGrams = breed === 'mixto'
+          ? Math.round((row.weight + BREED_TABLES.ross308[i].weight) / 2)
+          : row.weight;
+        const isCurrent = row.week === currentWeek;
+        return `
+          <tr class="${isCurrent ? 'highlight-row' : ''}">
+            <td>Sem ${row.week}</td>
+            <td>Día ${row.day}</td>
+            <td>${(wGrams / 1000).toFixed(2)} kg</td>
+            <td>${row.gain} g</td>
+            <td>${row.ica.toFixed(2)}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function recalcAll() {
+      // 1. Birds
+      const cantPollitos = Math.max(0, parseFloat(document.getElementById('cantPollitos').value) || 0);
+      const precioPollito = Math.max(0, parseFloat(document.getElementById('precioPollito').value) || 0);
+      const mortalidad = Math.max(0, parseFloat(document.getElementById('mortalidadAves').value) || 0);
+      const avesVivas = Math.max(0, cantPollitos - mortalidad);
+      const costoPollitos = cantPollitos * precioPollito;
+
+      document.getElementById('badgeAvesVivas').textContent = `${avesVivas} aves vivas`;
+      document.getElementById('subPollitos').textContent = `$${costoPollitos.toFixed(2)}`;
+
+      // 2. Feed by Phases
+      const sacosPre = Math.max(0, parseFloat(document.getElementById('sacosPre').value) || 0);
+      const precioPre = Math.max(0, parseFloat(document.getElementById('precioPre').value) || 0);
+      const kgSacoPre = parseFloat(document.getElementById('kgSacoPre').value) || 40;
+      const costoPre = sacosPre * precioPre;
+      const kgPre = sacosPre * kgSacoPre;
+
+      const sacosIni = Math.max(0, parseFloat(document.getElementById('sacosIni').value) || 0);
+      const precioIni = Math.max(0, parseFloat(document.getElementById('precioIni').value) || 0);
+      const kgSacoIni = parseFloat(document.getElementById('kgSacoIni').value) || 40;
+      const costoIni = sacosIni * precioIni;
+      const kgIni = sacosIni * kgSacoIni;
+
+      const sacosEng = Math.max(0, parseFloat(document.getElementById('sacosEng').value) || 0);
+      const precioEng = Math.max(0, parseFloat(document.getElementById('precioEng').value) || 0);
+      const kgSacoEng = parseFloat(document.getElementById('kgSacoEng').value) || 40;
+      const costoEng = sacosEng * precioEng;
+      const kgEng = sacosEng * kgSacoEng;
+
+      const totalAlimentoCosto = costoPre + costoIni + costoEng;
+      const totalAlimentoKg = kgPre + kgIni + kgEng;
+
+      document.getElementById('subPreinicio').textContent = `$${costoPre.toFixed(2)} · ${kgPre.toFixed(0)} kg`;
+      document.getElementById('subInicio').textContent = `$${costoIni.toFixed(2)} · ${kgIni.toFixed(0)} kg`;
+      document.getElementById('subEngorde').textContent = `$${costoEng.toFixed(2)} · ${kgEng.toFixed(0)} kg`;
+      document.getElementById('totalAlimentoCosto').textContent = `$${totalAlimentoCosto.toFixed(2)}`;
+      document.getElementById('totalKgAlimentoBadge').textContent = `${totalAlimentoKg.toFixed(0)} kg totales`;
+
+      // 3. Health & Other Expenses
+      const vit = Math.max(0, parseFloat(document.getElementById('gastoVitaminas').value) || 0);
+      const med = Math.max(0, parseFloat(document.getElementById('gastoMedicinas').value) || 0);
+      const otros = Math.max(0, parseFloat(document.getElementById('gastoOtros').value) || 0);
+      const extrasSum = extraExpenses.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0);
+
+      const totalGastos = costoPollitos + totalAlimentoCosto + vit + med + otros + extrasSum;
+      const costoPorAve = avesVivas > 0 ? totalGastos / avesVivas : 0;
+
+      document.getElementById('totalGastosGeneral').textContent = `$${totalGastos.toFixed(2)}`;
+      document.getElementById('costoPorAveLabel').textContent = `$${costoPorAve.toFixed(2)} / ave viva`;
+
+      // 4. Weights & Standard Table
+      const breed = document.getElementById('geneticLine').value;
+      const ageDays = Math.min(56, Math.max(1, parseInt(document.getElementById('loteAgeDays').value) || 1));
+      const currentWeek = Math.ceil(ageDays / 7);
+      const breedLabel = breed === 'cobb500' ? 'Cobb 500' : breed === 'ross308' ? 'Ross 308' : 'Mixto';
+
+      const avgLiveKg = getAverageWeightKg();
+      const stdGrams = getStandardWeightForDay(breed, ageDays);
+      const stdKg = stdGrams / 1000;
+      const diffPct = stdKg > 0 && avgLiveKg > 0 ? ((avgLiveKg - stdKg) / stdKg) * 100 : 0;
+      const diffGrams = (avgLiveKg - stdKg) * 1000;
+
+      // Uniformity (±10%)
+      let uniformPct = 100;
+      if (weightSamples.length > 1 && avgLiveKg > 0) {
+        const within = weightSamples.filter(w => Math.abs(w - avgLiveKg) <= avgLiveKg * 0.10).length;
+        uniformPct = Math.round((within / weightSamples.length) * 100);
+      }
+
+      document.getElementById('avgLiveWeightDisplay').textContent = `${avgLiveKg.toFixed(2)} kg`;
+      document.getElementById('uniformityLabel').textContent = `Uniformidad: ${uniformPct}% (±10%)`;
+      document.getElementById('lblTargetDay').textContent = ageDays;
+      document.getElementById('stdWeightDayVal').textContent = `${stdKg.toFixed(2)} kg`;
+      document.getElementById('diffGramsVal').textContent = `${diffGrams >= 0 ? '+' : ''}${Math.round(diffGrams)} g`;
+      document.getElementById('vsTableDiffBadge').textContent = `${diffPct >= 0 ? '+' : ''}${diffPct.toFixed(1)}% vs tabla`;
+
+      renderGrowthChart(breed, ageDays, avgLiveKg);
+      renderStandardTable(breed, currentWeek);
+
+      // 5. Merma & Carcass Yield
+      const mermaPct = Math.min(60, Math.max(0, parseFloat(document.getElementById('mermaPercentInput').value) || 26));
+      const yieldPct = 100 - mermaPct;
+      const birdsToDress = Math.max(0, parseFloat(document.getElementById('birdsToDress').value) || avesVivas);
+      const liveBatchKg = birdsToDress * avgLiveKg;
+      const estDressedBatchKg = liveBatchKg * (yieldPct / 100);
+
+      document.getElementById('mermaYieldBadge').textContent = `Rendimiento ${yieldPct.toFixed(0)}%`;
+      document.getElementById('mermaAplicadaBadge').textContent = `Merma ${mermaPct.toFixed(0)}%`;
+      document.getElementById('mermaLiveTotal').textContent = `${liveBatchKg.toFixed(2)} kg`;
+      document.getElementById('mermaLivePerBird').textContent = `${avgLiveKg.toFixed(2)} kg / ave`;
+      document.getElementById('mermaDressedTotal').textContent = `${estDressedBatchKg.toFixed(2)} kg`;
+      document.getElementById('mermaDressedPerBird').textContent = `${(avgLiveKg * yieldPct / 100).toFixed(2)} kg / ave`;
+
+      const gibletsKg = liveBatchKg * 0.08;
+      const discardKg = Math.max(0, liveBatchKg - estDressedBatchKg - gibletsKg);
+      document.getElementById('anatCarcass').style.width = `${yieldPct}%`;
+      document.getElementById('anatGiblets').style.width = `8%`;
+      document.getElementById('anatLoss').style.width = `${Math.max(0, mermaPct - 8)}%`;
+      document.getElementById('lblAnatCarcass').textContent = `● Canal: ${estDressedBatchKg.toFixed(2)} kg`;
+      document.getElementById('lblAnatGiblets').textContent = `● Menudencias: ${gibletsKg.toFixed(2)} kg`;
+      document.getElementById('lblAnatLoss').textContent = `● Descarte: ${discardKg.toFixed(2)} kg`;
+
+      // 6. Profit based ONLY on Dressed Weight
+      const pesoBeneficiado = Math.max(0, parseFloat(document.getElementById('pesoTotalBeneficiado').value) || 0);
+      const precioVentaKg = Math.max(0, parseFloat(document.getElementById('precioVentaKg').value) || 0);
+      const ingresoBruto = pesoBeneficiado * precioVentaKg;
+      const gananciaNeta = ingresoBruto - totalGastos;
+      const roi = totalGastos > 0 ? (gananciaNeta / totalGastos) * 100 : 0;
+      const puntoEquilibrio = pesoBeneficiado > 0 ? totalGastos / pesoBeneficiado : 0;
+      const gananciaPorAve = avesVivas > 0 ? gananciaNeta / avesVivas : 0;
+
+      const vivoRef = avesVivas * avgLiveKg;
+      const mermaRealKg = Math.max(0, vivoRef - pesoBeneficiado);
+      const mermaRealPct = vivoRef > 0 ? (mermaRealKg / vivoRef) * 100 : mermaPct;
+      const rendRealPct = Math.max(0, Math.min(100, 100 - mermaRealPct));
+
+      document.getElementById('lblVivoTotal').textContent = `Vivo lote: ${vivoRef.toFixed(2)} kg`;
+      document.getElementById('lblMermaTotal').textContent = `Merma: -${mermaRealKg.toFixed(2)} kg (${mermaRealPct.toFixed(1)}%)`;
+      document.getElementById('barRendimiento').style.width = `${rendRealPct}%`;
+      document.getElementById('barMerma').style.width = `${100 - rendRealPct}%`;
+
+      document.getElementById('ingresoBrutoVal').textContent = `$${ingresoBruto.toFixed(2)}`;
+      document.getElementById('puntoEquilibrioVal').textContent = `$${puntoEquilibrio.toFixed(2)} / kg`;
+      document.getElementById('gananciaNetaVal').textContent = `${gananciaNeta >= 0 ? '+' : ''}$${gananciaNeta.toFixed(2)}`;
+      document.getElementById('roiSubLabel').textContent = `ROI: ${roi >= 0 ? '+' : ''}${roi.toFixed(1)}% · $${gananciaPorAve.toFixed(2)} / ave`;
+
+      const banner = document.getElementById('profitBanner');
+      banner.classList.toggle('profit', gananciaNeta >= 0);
+      banner.classList.toggle('loss', gananciaNeta < 0);
+
+      // 7. Update Dynamic KPI Sheet & Mini-Bar
+      document.getElementById('topSubTitle').textContent = `${breedLabel} · Día ${ageDays} (Sem ${currentWeek})`;
+      document.getElementById('miniBarCost').textContent = `$${totalGastos.toFixed(2)}`;
+      const miniProfit = document.getElementById('miniBarProfit');
+      miniProfit.textContent = `${gananciaNeta >= 0 ? '+' : ''}$${gananciaNeta.toFixed(2)}`;
+      miniProfit.style.color = gananciaNeta >= 0 ? '#4ade80' : '#f87171';
+
+      document.getElementById('kpiAgeLine').textContent = `Día ${ageDays} (Sem ${currentWeek})`;
+      document.getElementById('kpiGeneticBadge').textContent = breedLabel;
+      document.getElementById('kpiAvgWeight').textContent = `${avgLiveKg.toFixed(2)} kg`;
+      document.getElementById('kpiVsStdBadge').textContent = `${diffPct >= 0 ? '+' : ''}${diffPct.toFixed(1)}% vs tabla`;
+      document.getElementById('kpiTotalCost').textContent = `$${totalGastos.toFixed(2)}`;
+      document.getElementById('kpiCostPerBird').textContent = `$${costoPorAve.toFixed(2)} / ave`;
+
+      const kpiProfit = document.getElementById('kpiNetProfit');
+      kpiProfit.textContent = `${gananciaNeta >= 0 ? '+' : ''}$${gananciaNeta.toFixed(2)}`;
+      kpiProfit.style.color = gananciaNeta >= 0 ? 'var(--primary)' : 'var(--red)';
+      document.getElementById('kpiRoiBadge').textContent = `${roi >= 0 ? '+' : ''}${roi.toFixed(1)}% ROI`;
+
+      const icaProj = vivoRef > 0 ? totalAlimentoKg / vivoRef : 0;
+      const feedShare = totalGastos > 0 ? (totalAlimentoCosto / totalGastos) * 100 : 0;
+      document.getElementById('kpiIcaVal').textContent = icaProj.toFixed(2);
+      document.getElementById('kpiFeedShare').textContent = `${feedShare.toFixed(1)}%`;
+
+      saveState();
+    }
+
+    function filterGuide(category, btnEl) {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      btnEl.classList.add('active');
+      document.querySelectorAll('.guide-item').forEach(item => {
+        item.style.display = (category === 'all' || item.dataset.cat === category) ? 'block' : 'none';
+      });
+    }
+
+    function saveState() {
+      const state = {
+        cantPollitos: document.getElementById('cantPollitos').value,
+        precioPollito: document.getElementById('precioPollito').value,
+        mortalidadAves: document.getElementById('mortalidadAves').value,
+        sacosPre: document.getElementById('sacosPre').value,
+        precioPre: document.getElementById('precioPre').value,
+        kgSacoPre: document.getElementById('kgSacoPre').value,
+        sacosIni: document.getElementById('sacosIni').value,
+        precioIni: document.getElementById('precioIni').value,
+        kgSacoIni: document.getElementById('kgSacoIni').value,
+        sacosEng: document.getElementById('sacosEng').value,
+        precioEng: document.getElementById('precioEng').value,
+        kgSacoEng: document.getElementById('kgSacoEng').value,
+        gastoVitaminas: document.getElementById('gastoVitaminas').value,
+        gastoMedicinas: document.getElementById('gastoMedicinas').value,
+        gastoOtros: document.getElementById('gastoOtros').value,
+        pesoTotalBeneficiado: document.getElementById('pesoTotalBeneficiado').value,
+        precioVentaKg: document.getElementById('precioVentaKg').value,
+        geneticLine: document.getElementById('geneticLine').value,
+        loteAgeDays: document.getElementById('loteAgeDays').value,
+        mermaPercentInput: document.getElementById('mermaPercentInput').value,
+        birdsToDress: document.getElementById('birdsToDress').value,
+        weightSamples,
+        extraExpenses
+      };
+      localStorage.setItem('aviculturapro_state_v1', JSON.stringify(state));
+    }
+
+    function loadState() {
+      const raw = localStorage.getItem('aviculturapro_state_v1');
+      if (!raw) return;
+      try {
+        const s = JSON.parse(raw);
+        Object.keys(s).forEach(k => {
+          const el = document.getElementById(k);
+          if (el && typeof s[k] !== 'object') el.value = s[k];
+        });
+        if (Array.isArray(s.weightSamples)) weightSamples = s.weightSamples;
+        if (Array.isArray(s.extraExpenses)) extraExpenses = s.extraExpenses;
+      } catch (e) {}
+    }
+
+    function exportBackup() {
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(localStorage.getItem('aviculturapro_state_v1') || '{}');
+      const a = document.createElement('a');
+      a.href = dataStr;
+      a.download = `AviculturaPro_Respaldo_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+    }
+
+    function resetDefaults() {
+      localStorage.removeItem('aviculturapro_state_v1');
+      location.reload();
+    }
+
+    // Register Service Worker for Offline Support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+
+    loadState();
+    renderWeightChips();
+    renderExtraExpenses();
+    recalcAll();
+  </script>
+</body>
+</html>
