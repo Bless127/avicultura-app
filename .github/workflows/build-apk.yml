@@ -1,0 +1,46 @@
+name: Compilar APK Android (AviculturaPro)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Configurar Java 17 (Requerido por Gradle Android)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Instalar dependencias Capacitor
+        run: npm install
+
+      - name: Generar proyecto Android y sincronizar web
+        run: |
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
+          npx cap sync android
+
+      - name: Dar permisos a Gradle y compilar APK Debug
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Subir APK listo para descargar
+        uses: actions/upload-artifact@v4
+        with:
+          name: AviculturaPro-Android-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
